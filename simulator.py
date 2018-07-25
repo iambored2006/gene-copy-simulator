@@ -1,25 +1,26 @@
+import config
 import gene
-from genes import Genes
 
 
 class Simulator:
 
     def __init__(self, initial_gene_count=100):
-        self.genes = Genes.generate_random_genes(initial_gene_count)
+        self.genes = []
+        for i in range(initial_gene_count):
+            self.genes.append(gene.generate_random_gene(i))
 
-    def run_generation(self, minimum_survival=80):
-        self.genes.replicate_genes(minimum_survival)
+    def run_generation(self, max_generation_size):
         replicated_genes = []
         for g in self.genes:
-            if g.survival >= minimum_survival:
-                replicated_genes.extend(g.get_offspring())
+            replicated_genes.extend(g.get_offspring())
 
-        self.genes = replicated_genes
+        replicated_genes.sort(gene.compare_survival, reverse=True)
+        self.genes = replicated_genes[:min(len(replicated_genes), max_generation_size)]
 
-    def run(self, generations=100, minimum_survival=80, log_file=None):
+    def run(self, generations=100, max_generation_size=50, log_file=None):
         final_log = ''
         for i in range(generations):
-            self.run_generation(minimum_survival)
+            self.run_generation(max_generation_size)
             log = self.to_string()
             if log_file is None:
                 print log
@@ -28,5 +29,5 @@ class Simulator:
 
         log_file.write(final_log)
 
-    def to_string(self, compare=gene.compare_survival):
+    def to_string(self, compare=gene.compare_id):
         return "|".join(map(str, sorted(self.genes, cmp=compare, reverse=True)))
