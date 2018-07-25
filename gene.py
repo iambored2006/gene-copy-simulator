@@ -4,7 +4,11 @@ import config
 
 def get_mutated_attribute(orig_value, attribute_min, attribute_max, fidelity):
     attribute_range = attribute_max - attribute_min
+    print fidelity
     mutated_value = int(orig_value + fidelity * (random.randrange(attribute_range) - attribute_range / 2))
+    print orig_value
+    print min(max(mutated_value, attribute_min), attribute_max)
+    print ''
     return min(max(mutated_value, attribute_min), attribute_max)
 
 
