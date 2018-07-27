@@ -1,3 +1,4 @@
+from random import shuffle
 import gene
 
 
@@ -13,8 +14,8 @@ class Simulator:
         for g in self.genes:
             replicated_genes.extend(g.get_offspring())
 
-        # TODO: shuffle genes with equivalent survival value
-        # TODO: so as to increase competition between rivaling strands of equal value
+        # shuffle genes so as to increase competition between rivaling strands of equal value
+        shuffle(replicated_genes)
         replicated_genes.sort(gene.compare_survival, reverse=True)
         self.genes = replicated_genes[:min(len(replicated_genes), max_generation_size)]
 

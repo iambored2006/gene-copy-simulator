@@ -2,6 +2,8 @@ from random import *
 from config import *
 
 
+# TODO: maybe get rid of max survival. start all genes with survival 1, and let them build it up in competition
+
 def get_mutated_attribute(orig_value, attribute_min, attribute_max, mutation_quotient):
     attribute_range = float(attribute_max - attribute_min)
     mutation = randrange(attribute_range + 1) - attribute_range / 2
