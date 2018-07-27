@@ -6,3 +6,5 @@ survival_max = 100
 
 fecundity_min = 1
 fecundity_max = 2
+
+mutation_range_scalar = 1

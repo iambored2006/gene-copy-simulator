@@ -1,4 +1,3 @@
-import config
 import gene
 
 
@@ -14,24 +13,19 @@ class Simulator:
         for g in self.genes:
             replicated_genes.extend(g.get_offspring())
 
+        # TODO: shuffle genes with equivalent survival value
+        # TODO: so as to increase competition between rivaling strands of equal value
         replicated_genes.sort(gene.compare_survival, reverse=True)
         self.genes = replicated_genes[:min(len(replicated_genes), max_generation_size)]
 
-    def run(self, generations=100, max_generation_size=50, log_file=None):
+    def run(self, generations=100, max_generation_size=100, log_file=None):
         final_id_log = ''
-        final_log = ''
+        final_data_log = ''
         for i in range(generations):
-            self.run_generation(max_generation_size)
+            final_data_log += '|'.join(map(str, sorted(self.genes, cmp=gene.compare_id, reverse=True))) + '\n'
             final_id_log += ','.join(map(lambda x: str(x), sorted(map(lambda x: x.id, self.genes)))) + '\n'
-            log = self.to_string()
-            if log_file is None:
-                print log
-            else:
-                final_log += log + '\n'
+            self.run_generation(max_generation_size)
 
-        log_file.write(final_log)
+        log_file.write(final_data_log)
         log_file.write('\n\n')
         log_file.write(final_id_log)
-
-    def to_string(self, compare=gene.compare_id):
-        return '|'.join(map(str, sorted(self.genes, cmp=compare, reverse=True)))
